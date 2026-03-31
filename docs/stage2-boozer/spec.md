@@ -14,7 +14,7 @@ Transforms a VMEC-style equilibrium into Boozer coordinates. Boozer coordinates 
 
 ### booz_xform_jax (Primary JAX)
 
-- **Repository:** <https://github.com/uwplasma/booz_xform_jax>
+- **Repository:** <https://github.com/uwplasma/boozx>
 - **Language:** Python/JAX
 - **Notes:** Also accepts in-memory wout-like objects, enabling a fully differentiable Stage 1 -> Stage 2 path without writing an intermediate NetCDF file.
 
@@ -41,14 +41,10 @@ Transforms a VMEC-style equilibrium into Boozer coordinates. Boozer coordinates 
 | Field | Type | Description | Source |
 |-------|------|-------------|--------|
 | `wout_*.nc` | NetCDF file | Full VMEC equilibrium output | Stage 1 |
-| `in_booz.*` | Control file | Resolution settings and surface list | User-specified |
 
-The control file specifies:
+The JAX version (booz_xform_jax) does not use a separate `in_booz.*` control file. Resolution (mboz, nboz) and surface selection are specified via the Python API. The legacy BOOZ_XFORM uses an `in_booz.*` control file.
 
-- **mboz, nboz:** Boozer mode resolution (number of poloidal and toroidal modes in the Boozer expansion).
-- **Surface list:** Which radial surfaces (flux-surface indices) to compute the Boozer transform on.
-
-The JAX version also accepts in-memory wout-like objects directly from Stage 1, bypassing file I/O.
+booz_xform_jax also accepts in-memory wout-like objects directly from Stage 1, bypassing file I/O.
 
 ### Input Validation
 

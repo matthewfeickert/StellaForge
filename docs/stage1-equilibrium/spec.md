@@ -58,8 +58,8 @@ Reference: `stellarator_workflow/stellarator_workflow.tex`, Section 4.1 (VMEC++ 
 | `FTOL` / `FTOL_ARRAY` | float / array | Convergence tolerances |
 
 ### Input Formats
-- **INDATA files:** Classic `input.NAME` format (VMEC++ and vmec_jax)
-- **JSON:** Programmatic input (VMEC++)
+- **INDATA files:** Fortran-style text `input.NAME` format (vmec_jax and VMEC++)
+- **JSON:** Programmatic input (VMEC++ only)
 - **Python objects:** In-memory API (both VMEC++ and vmec_jax)
 - **Hot restart:** Previous converged output state as initial guess
 

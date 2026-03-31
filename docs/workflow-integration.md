@@ -19,7 +19,7 @@ graph LR
     IN[Input: boundary coefficients + profiles] --> S1[Stage 1: Equilibrium]
     S1 -->|"wout_*.nc"| S2[Stage 2: Boozer Transform]
     S2 -->|"boozmn_*.nc"| S3a[Stage 3a: NEO_JAX]
-    S2 -->|"boozmn_*.nc"| S3b[Stage 3b: sfincs_jax]
+    S1 -->|"wout_*.nc"| S3b[Stage 3b: sfincs_jax]
     S2 -->|"boozmn_*.nc / field obj"| S3c[Stage 3c: MONKES]
     S2 -->|"geometry"| S4[Stage 4: SPECTRAX-GK]
     S3a -->|"epsilon_eff (screening)"| OUT
@@ -30,7 +30,7 @@ graph LR
 ```
 
 **Parallelism opportunities:**
-- Stage 3a (NEO_JAX), 3b (sfincs_jax), 3c (MONKES) can all run in parallel after Stage 2
+- Stage 3a (NEO_JAX) and 3c (MONKES) can run in parallel after Stage 2; 3b (sfincs_jax) can start after Stage 1
 - Stage 4 (SPECTRAX-GK) can run in parallel with all of Stage 3
 - Stage 5 (NEOPAX) waits for Stage 3c (MONKES) and Stage 4 (SPECTRAX-GK)
 
@@ -102,7 +102,7 @@ rule neoclassical_neo_jax:
 
 rule neoclassical_sfincs_jax:
     input:
-        boozmn="{run_dir}/stage2_boozer/boozmn_{name}.nc"
+        wout="{run_dir}/stage1_equilibrium/wout_{name}.nc"
     output:
         sfincs_out="{run_dir}/stage3_neoclassical/sfincsOutput_{name}.h5"
     ...
@@ -355,7 +355,7 @@ For each adjacent pair:
 |---------|------|
 | Stage 1 -> 2 | wout_*.nc from vmec_jax is correctly read by booz_xform_jax |
 | Stage 2 -> 3a | boozmn_*.nc is correctly read by NEO_JAX |
-| Stage 2 -> 3b | boozmn_*.nc is correctly read by sfincs_jax |
+| Stage 1 -> 3b | wout_*.nc is correctly read by sfincs_jax |
 | Stage 2 -> 3c | boozmn_*.nc / field obj is correctly consumed by MONKES |
 | Stage 3c -> 5 | D_ij HDF5 database is correctly read by NEOPAX |
 | Stage 4 -> 5 | SPECTRAX-GK flux output is consumed by NEOPAX (coordination point!) |

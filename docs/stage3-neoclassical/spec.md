@@ -10,7 +10,7 @@ Stage 3 computes neoclassical transport properties from the Boozer-coordinate eq
 
 **Critical distinction:** NEO's epsilon_eff is a screening metric used for ranking configurations. SFINCS fluxes and MONKES D_ij coefficients are actual transport inputs consumed by Stage 5.
 
-**Position in pipeline:** Receives `boozmn_*.nc` from Stage 2 (Boozer). The three sub-stages fan out from Stage 2 and fan in to Stage 5 (Transport). Stage 3 runs in parallel with Stage 4 (Turbulence).
+**Position in pipeline:** NEO_JAX and MONKES receive `boozmn_*.nc` from Stage 2 (Boozer). sfincs_jax receives `wout_*.nc` directly from Stage 1 (Equilibrium). The three sub-stages fan in to Stage 5 (Transport). Stage 3 runs in parallel with Stage 4 (Turbulence).
 
 **Reference:** `stellarator_workflow.tex`, Sections 4.4-4.6; `stellarator_io_reference.tex`, Sections 3.4-3.6.
 
@@ -173,8 +173,8 @@ Total `epstot` is the sum over classes.
 
 | Field | Type | Description | Source |
 |-------|------|-------------|--------|
-| Boozer geometry | from `boozmn_*.nc` or `.bc` file | Magnetic field in Boozer coordinates | Stage 2 |
-| `input.namelist` | Namelist file | Configuration with groups: `general`, `geometryParameters`, `speciesParameters`, `physicsParameters`, `resolutionParameters`, `otherNumericalParameters`, `preconditionerOptions`, `export_f` | User-specified |
+| `wout_*.nc` | NetCDF file | VMEC equilibrium output (referenced via `equilibriumFile` in the input file) | Stage 1 |
+| `input.*` | Fortran-style text file | Configuration with species, gradients, resolution, and `equilibriumFile` path | User-specified |
 
 Key namelist parameters: species charges/masses, $\hat{n}_s$, $\hat{T}_s$, their gradients, collision model, E_r guess, Phi1 switches, numerical resolution.
 

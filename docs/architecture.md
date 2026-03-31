@@ -33,8 +33,8 @@ graph LR
     end
 
     EQ -->|"wout_*.nc"| BZ
+    EQ -->|"wout_*.nc"| SF
     BZ -->|"boozmn_*.nc"| NEO
-    BZ -->|"boozmn_*.nc"| SF
     BZ -->|"boozmn_*.nc / field obj"| MK
     BZ -->|"geometry"| TU
     NEO -->|"epsilon_eff (screening only)"| OUT
@@ -44,15 +44,15 @@ graph LR
     TR -->|"n(r), T(r), E_r(r), P_fus, Q"| OUT[Forward Pass Output]
 ```
 
-Note: Stages 3 and 4 can run in parallel after Stage 2 completes. Within Stage 3, NEO_JAX, sfincs_jax, and MONKES can also run in parallel. NEO_JAX's epsilon_eff output is a screening diagnostic only -- it does NOT feed into NEOPAX or Trinity3D as a transport variable.
+Note: Stages 3 and 4 can run in parallel after Stage 2 completes (sfincs_jax can start as soon as Stage 1 completes since it reads wout directly). Within Stage 3, NEO_JAX, sfincs_jax, and MONKES can also run in parallel. NEO_JAX's epsilon_eff output is a screening diagnostic only -- it does NOT feed into NEOPAX or Trinity3D as a transport variable.
 
 ## Stage Summary Table
 
 | Stage | Physics | JAX Primary | Alternatives | Input Artifacts | Output Artifacts |
 |-------|---------|-------------|--------------|-----------------|------------------|
 | 1. Equilibrium | Ideal-MHD force balance: nabla p = J x B | vmec_jax, DESC | VMEC++ | INDATA/JSON boundary coefficients, pressure/iota/current coefficients, PHIEDGE | `wout_*.nc` (NetCDF) |
-| 2. Boozer Transform | Coordinate transform to Boozer angles | booz_xform_jax | BOOZ_XFORM | `wout_*.nc` + `in_booz.*` control | `boozmn_*.nc` (NetCDF) |
-| 3. Neoclassical | Effective ripple (NEO), drift-kinetic transport (SFINCS), monoenergetic coefficients (MONKES) | NEO_JAX, sfincs_jax, MONKES | NEO, SFINCS | `boozmn_*.nc` + stage-specific controls | `neo_out.*`, `sfincsOutput.h5`, D_ij HDF5 database |
+| 2. Boozer Transform | Coordinate transform to Boozer angles | booz_xform_jax | BOOZ_XFORM | `wout_*.nc` (JAX: Python API; legacy: `in_booz.*` control) | `boozmn_*.nc` (NetCDF) |
+| 3. Neoclassical | Effective ripple (NEO), drift-kinetic transport (SFINCS), monoenergetic coefficients (MONKES) | NEO_JAX, sfincs_jax, MONKES | NEO, SFINCS | NEO/MONKES: `boozmn_*.nc`; SFINCS: `wout_*.nc` + input file | `neo_out.*`, `sfincsOutput.h5`, D_ij HDF5 database |
 | 4. Turbulence | Delta-f gyrokinetic equation | SPECTRAX-GK | GX, GENE | Geometry + species profiles/gradients | gamma, omega, heat/particle flux (NetCDF/CSV) |
 | 5. Transport | 1D conservation laws for n_s, p_s | NEOPAX | Trinity3D | D_ij database + geometry + fluxes | n(r), T(r), E_r(r), P_fus, Q (HDF5/NetCDF) |
 
