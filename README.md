@@ -114,7 +114,7 @@ cd StellaForge
 git submodule update --init --recursive
 
 # Run the full pipeline
-snakemake --use-singularity --configfile config.yaml
+snakemake --sdm docker --configfile config.yaml
 
 # Or pull prebuilt containers and run individual stages
 docker pull stellaforge/stage1-equilibrium:latest
