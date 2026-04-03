@@ -260,7 +260,7 @@ Output files should be inspected to verify that shapes, types (float32 vs float6
 
 ## Coding Conventions
 
-The full coding standards are in `CLAUDE.md` at the repository root. Key points for stage work:
+Key points for stage work:
 
 - No cross-stage Python imports during Phase 1: all inter-stage communication is through files (e.g. NetCDF/HDF5). This is necessary to maintain swappability.
 - Follow PEP 8 with 120-char line width
