@@ -195,7 +195,7 @@ Place tests in `tests/stage{N}-{name}/`.
 **Integration tests.** Verify that the stage's output is valid input for its downstream consumers. For example:
 - Stage 1: verify `wout_*.nc` can be read by `booz_xform_jax` (Stage 2), `sfincs_jax` (Stage 3), and `SPECTRAX-GK` (Stage 4)
 - Stage 2: verify `boozmn_*.nc` can be read by `NEO_JAX` and `monkes` (Stage 3)
-- Stage 3: verify `sfincsOutput.h5` and `D_ij.h5` can be read by `NEOPAX` (Stage 5)
+- Stage 3: verify `sfincsOutput.h5` (if using `sfincs_jax`) or `D_ij.h5` (if using `monkes`) can be read by `NEOPAX` (Stage 5)
 - Stage 4: verify flux CSV output can be consumed by `NEOPAX` (Stage 5)
 - Stage 5: verify end-to-end output (`profiles.h5`: n(r), T(r), E_r(r), P_fus, Q) is produced correctly
 - Stage 5 → Stage 1: verify updated profiles from Stage 5 can be fed back as input to Stage 1 to close the optimization loop
