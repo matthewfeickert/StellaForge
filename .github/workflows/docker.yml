@@ -80,6 +80,7 @@ jobs:
           environment: ${{ matrix.environment }}
           image-tag: ${{ matrix.image-tag }}
           cuda-version: ${{ matrix.cuda-version || '' }}
-          push: ${{ github.event_name != 'pull_request' }}
+          # Only deploy on the main project
+          push: ${{ github.event_name != 'pull_request' && github.repository == 'rkhashmani/stellaforge' }}
           registry-username: ${{ github.repository_owner }}
           registry-password: ${{ secrets.GITHUB_TOKEN }}
