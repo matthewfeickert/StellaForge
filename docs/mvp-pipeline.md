@@ -163,8 +163,6 @@ cd monkes
 pip install .
 ```
 
-> [!NOTE]
-> The instructions are correct, but it currently does not work. This will be fixed very soon.
 #### How to Run
 
 Monkes is a little more involved. See `mvp/stage3-neoclassical/monkes/Test_Monoenergetic_database_VMEC_s_coordinate_HSX.py`
