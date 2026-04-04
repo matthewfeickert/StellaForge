@@ -9,8 +9,6 @@ depends-on = [ "stage-1-vmec", "stage-2-booz", "stage-3-sfincs"]
 
 [dependencies]
 
-# --- Stage 1: Equilibrium ---
-
 [feature.vmec-jax.dependencies]
 numpy = ">=2.4.3,<3"
 jax = ">=0.9.1,<0.10"
@@ -21,8 +19,6 @@ vmec-jax = { git = "https://github.com/uwplasma/vmec_jax", rev = "cfdf674b0ca213
 
 [feature.vmec-jax.tasks.stage-1-vmec]
 cmd = "vmec_jax stage1-equilibrium/vmec_jax/input/input.HSX_QHS_vacuum_ns201"
-
-# --- Stage 2: Boozer Transform ---
 
 [feature.booz-xform-jax.dependencies]
 numpy = ">=2.4.3,<3"
@@ -38,8 +34,6 @@ booz-xform-jax = { git = "https://github.com/uwplasma/booz_xform_jax.git", rev =
 [feature.booz-xform-jax.tasks.stage-2-booz]
 cmd = "python stage2-boozer/example.py"
 
-# --- Stage 3: Neoclassical Transport ---
-
 [feature.sfincs-jax.dependencies]
 numpy = ">=2.4.3,<3"
 scipy = ">=1.17.1,<2"
@@ -51,8 +45,6 @@ sfincs-jax = { git = "https://github.com/uwplasma/sfincs_jax", rev = "de50abd2ee
 
 [feature.sfincs-jax.tasks.stage-3-sfincs]
 cmd = "sfincs_jax stage3-neoclassical/sfincs_jax/input/input.HSX_QHS_vacuum_ns201"
-
-# --- Stage 4: Turbulence ---
 
 [feature.spectrax-gk.dependencies]
 numpy = ">=2.3,<2.4"
@@ -71,8 +63,6 @@ booz-xform-jax = { git = "https://github.com/uwplasma/booz_xform_jax.git", rev =
 
 [feature.spectrax-gk.tasks.stage-4-spectrax]
 cmd = "spectrax-gk run --config ./stage4-turbulence/spectrax_gk/input/runtime_hsx_nonlinear_vmec_geometry.toml --out stage4-turbulence/spectrax_gk/tools_out/hsx_run"
-
-# --- Stage 5: Transport ---
 
 [feature.neopax.dependencies]
 scipy = ">=1.17.1,<2"
@@ -97,18 +87,13 @@ platforms = ["linux-64"]
 cuda = "12"
 
 [environments]
-# Stage 1: Equilibrium
 stage-1-vmec = {features = ["vmec-jax"], no-default-feature = true }
 stage-1-vmec-gpu = {features = ["vmec-jax", "cuda"], no-default-feature = true }
-# Stage 2: Boozer Transform
 stage-2-booz = {features = ["booz-xform-jax"], no-default-feature = true }
 stage-2-booz-gpu = {features = ["booz-xform-jax", "cuda"], no-default-feature = true }
-# Stage 3: Neoclassical Transport
 stage-3-sfincs = {features = ["sfincs-jax"], no-default-feature = true}
 stage-3-sfincs-gpu = {features = ["sfincs-jax", "cuda"], no-default-feature = true }
-# Stage 4: Turbulence
 stage-4-spectrax = {features = ["spectrax-gk"], no-default-feature = true}
 stage-4-spectrax-gpu = {features = ["spectrax-gk", "cuda"], no-default-feature = true }
-# Stage 5: Transport
 stage-5-neopax = {features = ["neopax"], no-default-feature = true}
 stage-5-neopax-gpu = {features = ["neopax", "cuda"], no-default-feature = true }
