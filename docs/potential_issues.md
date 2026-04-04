@@ -1,5 +1,9 @@
 # Potential Issues
 
+## Cross-Stage Infrastructure
+
+- [ ] Maybe a location where standard input/outputs are stored and logged? This has the added benefit that we can use this as a "cache" to quickly retrieve outputs that have already been processed, kind of like a database.
+
 ## Stage 1 -- Equilibrium
 
 - [ ] vmec/vmec_jax and DESC do not have directly compatible inputs; an adapter or input translation layer will be needed to support both implementations behind the same pipeline entry point
@@ -19,3 +23,15 @@
 ## Stage 4 -- Turbulence
 
 - [ ] SPECTRAX-GK/GX, and GENE likely do not have directly compatible inputs; same adapter/translation issue as Stages 1 and 3
+
+## W&B
+
+- [ ] Decide whether W&B dashboards are internal (maintainers only) or public-facing.
+
+## Workflow Engine
+
+- [ ] Container registry for external collaborators: where do external contributors host their alternative stage implementations? Maybe their own GHCR or Docker Hub, with the workflow engine pulling from there.
+- [ ] How to expose the workflow engine to external users.
+- [ ] How to validate that externally submitted containers are not a security threat.
+- [ ] Parallelization strategy: when a stage's internal loop can be parallelized across threads or compute nodes, should Snakemake handle the distribution or should the stage software manage it internally?
+	- [ ] Consider an intermediate orchestration layer between Snakemake and the stage software that handles parallelization.
