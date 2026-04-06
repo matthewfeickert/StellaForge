@@ -80,9 +80,9 @@ The pipeline should eventually support config-driven implementation swapping. Po
 
 ### Contributing Changes
 
-1. Branch from `main` (e.g., `feat/stage1-newsoftware`, `fix/update-naming-schema`)
+1. Fork the repository and branch from `main` (e.g., `feat/stage1-newsoftware`, `fix/update-naming-schema`)
 2. Work through the relevant phase below
-3. Open a PR when deliverables are ready and request a review
+3. Open a PR from the fork when deliverables are ready and request a review
 4. After review and merge, the corresponding progress item in the [README](../README.md#progress) gets checked off
 
 ## Phase 1: Document & Run
