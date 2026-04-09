@@ -1,5 +1,5 @@
-ARG CUDA_VERSION=""
-ARG ENVIRONMENT="gpu"
+ARG CUDA_VERSION="12"
+ARG ENVIRONMENT="default"
 
 FROM ghcr.io/prefix-dev/pixi:noble AS build
 
@@ -11,11 +11,9 @@ WORKDIR /app
 COPY . .
 # Providing git so that the pypi installs from Git can proceed
 RUN pixi global install git
-# Only set CONDA_OVERRIDE_CUDA when a non-empty CUDA_VERSION is provided,
-# as an empty string causes Pixi to fail parsing the virtual package version.
-RUN if [ -n "$CUDA_VERSION" ]; then \
-        export CONDA_OVERRIDE_CUDA="$CUDA_VERSION"; \
-    fi && \
+# CONDA_OVERRIDE_CUDA can be set to a non-empty value with no problems for CPU
+# specific builds as the environment is already locked and this just installs it.
+RUN export CONDA_OVERRIDE_CUDA="$CUDA_VERSION" && \
     pixi install --locked --environment $ENVIRONMENT
 # Activate ENVIRONMENT at container runtime by using the Pixi environment
 # activation script as the container ENTRYPOINT
