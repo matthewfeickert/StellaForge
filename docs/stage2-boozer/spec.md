@@ -180,7 +180,7 @@ docker build --build-arg ENVIRONMENT=stage-2-booz mvp/        # CPU
 docker build --build-arg ENVIRONMENT=stage-2-booz-gpu --build-arg CUDA_VERSION=12 mvp/  # GPU
 ```
 
-Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-2-booz-cpu` and `stage-2-booz-gpu`. CI builds via `.github/workflows/docker.yml`.
+Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-2-booz-cpu` and `stage-2-booz-gpu`. CI builds via `.github/workflows/containers.yml`.
 
 See [guide](../guide.md#container-architecture) for full architecture details.
 
