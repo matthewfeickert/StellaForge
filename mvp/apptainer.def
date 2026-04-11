@@ -1,0 +1,65 @@
+Bootstrap: docker
+From: ghcr.io/prefix-dev/pixi:noble
+Stage: build
+
+# %arguments have to be defined at each stage
+%arguments
+    CUDA_VERSION=12
+    ENVIRONMENT=default
+
+%files
+./pixi.toml /app/
+./pixi.lock /app/
+./.gitignore /app/
+
+%post
+#!/usr/bin/env bash
+# Providing git so that the pypi installs from Git can proceed
+pixi global install git
+# CONDA_OVERRIDE_CUDA can be set to a non-empty value with no problems for CPU
+# specific builds as the environment is already locked and this just installs it.
+export CONDA_OVERRIDE_CUDA={{ CUDA_VERSION }}
+cd /app/
+pixi info
+pixi install --locked --environment {{ ENVIRONMENT }}
+# Activate ENVIRONMENT at container runtime by using the Pixi environment
+# activation script as the container ENTRYPOINT.
+# The ENTRYPOINT does not contain 'exec "$@"' as Apptainer will source it
+# during the env activation and an 'exec' would replace the process before
+# Apptainer completes setup.
+echo "#!/usr/bin/env bash" > /app/entrypoint.sh && \
+pixi shell-hook --environment {{ ENVIRONMENT }} -s bash >> /app/entrypoint.sh
+
+Bootstrap: docker
+From: ghcr.io/prefix-dev/pixi:noble
+Stage: final
+
+%arguments
+    ENVIRONMENT=default
+
+%files from build
+/app/.pixi/envs/{{ ENVIRONMENT }} /app/.pixi/envs/{{ ENVIRONMENT }}
+/app/pixi.toml /app/pixi.toml
+/app/pixi.lock /app/pixi.lock
+/app/.gitignore /app/.gitignore
+# The ignore files are needed for 'pixi run' to work in the container
+/app/.pixi/.gitignore /app/.pixi/.gitignore
+/app/.pixi/.condapackageignore /app/.pixi/.condapackageignore
+/app/entrypoint.sh /app/entrypoint.sh
+
+%post
+#!/usr/bin/env bash
+cd /app/
+pixi info
+chmod +x /app/entrypoint.sh
+
+%environment
+. /app/entrypoint.sh
+
+%test
+#!/usr/bin/env -S bash -e
+# Pixi/uv need writable cache directories, but during %test the root
+# filesystem may be read-only so point caches to /tmp.
+export XDG_CACHE_HOME=/tmp/.cache
+pixi info
+pixi list

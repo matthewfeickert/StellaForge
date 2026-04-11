@@ -106,7 +106,7 @@ Work through these steps in order. Each step should result in updates to the sta
 - Inspect the output files to understand their structure. For example:
   - For NetCDF: `ncdump -h output_file.nc` (shows all variables, dimensions, attributes)
   - For HDF5: `h5dump -H output_file.h5` (shows structure without data)
-- Document any change in output file format from the MVP.  
+- Document any change in output file format from the MVP.
 
 ### Step 3: Document the API
 
@@ -117,7 +117,7 @@ Work through these steps in order. Each step should result in updates to the sta
 ### Step 4: Document Convergence & Validity
 
 - Identify input configurations that are known to converge (cite specific stellarator configs if possible)
-- Identify configurations that fail or diverge, optionally identify why. 
+- Identify configurations that fail or diverge, optionally identify why.
 - Document convergence criteria and tolerances
 - Note known numerical edge cases
 - Fill in the "Convergence & Validity" section of the relevant spec
@@ -163,13 +163,15 @@ StellaForge is a **recipe repo**: it contains everything needed to build and run
 
 **Pixi-based environments.** Dependencies are managed through `pixi.toml` files, e.g., `mvp/pixi.toml` and locked in `pixi.lock` files, e.g., `mvp/pixi.lock`. Stages with Pixi environments defined have named environments (e.g., `stage-1-vmec`, `stage-1-vmec-gpu`) that fully specify the dependency stack.
 
-**Single templated Dockerfile.** There is one shared `Dockerfile`, e.g. `mvp/Dockerfile` that uses build arguments to select the target environment at build time:
-- `ENVIRONMENT` -- the Pixi environment name (e.g., `stage-1-vmec`, `stage-2-booz-gpu`). Must be passed explicitly when building locally: `docker build --build-arg ENVIRONMENT=stage-1-vmec mvp/`
+**Templated container images.** There is one shared `Dockerfile` and `apptainer.def` Apptainer definition file, e.g. `mvp/Dockerfile` that uses build arguments to select the target environment at build time:
+- `ENVIRONMENT` -- the Pixi environment name (e.g., `stage-1-vmec`, `stage-2-booz-gpu`). Must be passed explicitly when building locally:
+   - `docker build --build-arg ENVIRONMENT=stage-1-vmec mvp/`
+   - `cd mvp && apptainer build --build-arg ENVIRONMENT="stage-1-vmec" stage-1-vmec.sif apptainer.def`
 - `CUDA_VERSION` -- set for GPU builds (e.g., `12`), left empty for CPU builds
 
 The Dockerfile uses a multi-stage build on a `ghcr.io/prefix-dev/pixi:noble` base image. See `mvp/Dockerfile` for implementation details.
 
-**Container images** are published to GHCR at `ghcr.io/rkhashmani/stellaforge`. For MVP, the tags follow the pattern `stage-{N}-{code}-cpu` / `stage-{N}-{code}-gpu` (e.g., `stage-1-vmec-cpu`). CI builds all stage variants from the single Dockerfile using a GitHub Actions matrix. See `.github/workflows/docker.yml` and `.github/actions/build-docker/action.yml` for the CI setup.
+**Container images** are published to GHCR at `ghcr.io/rkhashmani/stellaforge`. For MVP, the tags follow the pattern `stage-{N}-{code}-cpu` / `stage-{N}-{code}-gpu` (e.g., `stage-1-vmec-cpu`). Apptainer container images are prefixed with `apptainer-`. CI builds all stage variants from the container image definition files using a GitHub Actions matrix. See `.github/workflows/containers.yml` and `.github/actions/build-docker/action.yml` for the CI setup.
 
 **Adding or updating a dependency:**
 1. Update the relevant `pixi.toml` (add/change the dependency or git rev)

@@ -316,7 +316,7 @@ docker build --build-arg ENVIRONMENT=stage-5-neopax mvp/        # CPU
 docker build --build-arg ENVIRONMENT=stage-5-neopax-gpu --build-arg CUDA_VERSION=12 mvp/  # GPU
 ```
 
-Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-5-neopax-cpu` and `stage-5-neopax-gpu`. CI builds via `.github/workflows/docker.yml`.
+Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-5-neopax-cpu` and `stage-5-neopax-gpu`. CI builds via `.github/workflows/containers.yml`.
 
 See [guide](../guide.md#container-architecture) for full architecture details.
 

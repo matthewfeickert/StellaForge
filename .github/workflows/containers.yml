@@ -1,0 +1,114 @@
+name: Container Images
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+    paths:
+      - 'mvp/pixi.toml'
+      - 'mvp/pixi.lock'
+      - 'mvp/Dockerfile'
+      - 'mvp/.dockerignore'
+      - 'mvp/apptainer.def'
+  pull_request:
+    paths:
+      - 'mvp/pixi.toml'
+      - 'mvp/pixi.lock'
+      - 'mvp/Dockerfile'
+      - 'mvp/.dockerignore'
+      - 'mvp/apptainer.def'
+  release:
+    types: [published]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  matrix:
+    name: Generate build matrix
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      include: ${{ steps.set-matrix.outputs.include }}
+    steps:
+      - id: set-matrix
+        run: |
+          matrix=$(cat <<'EOF'
+          [
+            {"environment": "stage-1-vmec", "image-tag": "stage-1-vmec-cpu"},
+            {"environment": "stage-1-vmec-gpu", "cuda-version": "12", "image-tag": "stage-1-vmec-gpu"},
+            {"environment": "stage-2-booz", "image-tag": "stage-2-booz-cpu"},
+            {"environment": "stage-2-booz-gpu", "cuda-version": "12", "image-tag": "stage-2-booz-gpu"},
+            {"environment": "stage-3-sfincs", "image-tag": "stage-3-sfincs-cpu"},
+            {"environment": "stage-3-sfincs-gpu", "cuda-version": "12", "image-tag": "stage-3-sfincs-gpu"},
+            {"environment": "stage-4-spectrax", "image-tag": "stage-4-spectrax-cpu"},
+            {"environment": "stage-4-spectrax-gpu", "cuda-version": "12", "image-tag": "stage-4-spectrax-gpu"},
+            {"environment": "stage-5-neopax", "image-tag": "stage-5-neopax-cpu"},
+            {"environment": "stage-5-neopax-gpu", "cuda-version": "12", "image-tag": "stage-5-neopax-gpu"}
+          ]
+          EOF
+          )
+          echo "include=$(echo "$matrix" | jq -c .)" >> "$GITHUB_OUTPUT"
+
+  docker:
+    name: Docker ${{ matrix.image-tag }}
+    needs: matrix
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.matrix.outputs.include) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Build Docker image
+        uses: ./.github/actions/build-docker
+        with:
+          environment: ${{ matrix.environment }}
+          image-tag: ${{ matrix.image-tag }}
+          cuda-version: ${{ matrix.cuda-version || '' }}
+          # Only deploy on the main project
+          push: ${{ github.event_name != 'pull_request' && github.repository == 'rkhashmani/stellaforge' }}
+          registry-username: ${{ github.repository_owner }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
+
+  apptainer:
+    name: Apptainer ${{ matrix.image-tag }}
+    needs: matrix
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.matrix.outputs.include) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Build Apptainer image
+        uses: ./.github/actions/build-apptainer
+        with:
+          environment: ${{ matrix.environment }}
+          image-tag: ${{ matrix.image-tag }}
+          cuda-version: ${{ matrix.cuda-version || '' }}
+          # Only deploy on the main project
+          push: ${{ github.event_name != 'pull_request' && github.repository == 'rkhashmani/stellaforge' }}
+          registry-username: ${{ github.repository_owner }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}

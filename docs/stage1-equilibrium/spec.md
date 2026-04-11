@@ -243,7 +243,7 @@ docker build --file mvp/Dockerfile --build-arg ENVIRONMENT=stage-1-vmec --platfo
 docker build --file mvp/Dockerfile --build-arg CUDA_VERSION=12 --build-arg ENVIRONMENT=stage-1-vmec-gpu --platform linux/amd64 --tag ghcr.io/rkhashmani/stellaforge:stage-1-vmec-gpu mvp/  # GPU
 ```
 
-Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-1-vmec-cpu` and `stage-1-vmec-gpu`. CI builds via `.github/workflows/docker.yml`.
+Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-1-vmec-cpu` and `stage-1-vmec-gpu`. CI builds via `.github/workflows/containers.yml`.
 
 See [guide](../guide.md#container-architecture) for full architecture details.
 
