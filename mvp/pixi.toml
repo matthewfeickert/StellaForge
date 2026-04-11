@@ -47,8 +47,8 @@ sfincs-jax = { git = "https://github.com/uwplasma/sfincs_jax", rev = "de50abd2ee
 cmd = "sfincs_jax stage3-neoclassical/sfincs_jax/input/input.HSX_QHS_vacuum_ns201"
 
 [feature.spectrax-gk.dependencies]
-numpy = ">=2.3,<2.4"
-jax = ">=0.8,<0.9"
+numpy = ">=2.4.3,<3"
+jax = ">=0.9.2,<0.10"
 diffrax = ">=0.7.2,<0.8"
 equinox = ">=0.13.6,<0.14"
 tqdm = ">=4.67.3,<5"
@@ -58,7 +58,7 @@ netcdf4 = ">=1.7.4,<2"
 plotly = ">=6.6.0,<7"
 
 [feature.spectrax-gk.pypi-dependencies]
-spectrax-gk = { git = "https://github.com/uwplasma/SPECTRAX-GK.git", rev = "61aac059166e30f937fa0ad6163b4d857c132622" }
+spectrax-gk = { git = "https://github.com/uwplasma/SPECTRAX-GK.git", rev = "cbd1f5b647347bb91e1e943e69bcd166a43000c0" }
 booz-xform-jax = { git = "https://github.com/uwplasma/booz_xform_jax.git", rev = "1f206597f2f28436e0e2124160c13de9ae63b2ea" }
 
 [feature.spectrax-gk.tasks.stage-4-spectrax]
