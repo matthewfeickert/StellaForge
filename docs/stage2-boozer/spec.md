@@ -26,16 +26,19 @@ Transforms a VMEC-style equilibrium into Boozer coordinates. Boozer coordinates 
 
 ### Installation & Platform
 
-**`booz_xform_jax`:** Install via the Pixi environment. From inside `mvp/`:
+**`booz_xform` (legacy Fortran/Python):** Install via the Pixi environment. From inside `mvp/`:
 
 ```
 pixi install --environment stage-2-booz
 ```
 
-See `docs/mvp-pipeline.md` for run commands and I/O details.
+**`booz_xform_jax`:** Install via the Pixi environment. From inside `mvp/`:
 
-> [!TODO]
-> Document installation instructions and platform notes for `BOOZ_XFORM`.
+```
+pixi install --environment stage-2-booz-jax
+```
+
+See `docs/mvp-pipeline.md` for run commands and I/O details.
 
 ---
 
@@ -146,19 +149,24 @@ where $w$ is reconstructed from the original covariant field harmonics.
 
 ## Scripts & Workflows
 
-**`booz_xform_jax` (via Pixi):** From inside `mvp/`:
+**`booz_xform` (via Pixi):** From inside `mvp/`:
 
 ```
 pixi run stage-2-booz
+```
+
+Smoke-test task: verifies the `booz_xform` package is importable. A full end-to-end example for the legacy code is TBD.
+
+**`booz_xform_jax` (via Pixi):** From inside `mvp/`:
+
+```
+pixi run -e stage-2-booz-jax stage-2-booz
 ```
 
 **Input:** `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc` (from Stage 1)
 **Output:** `mvp/stage2-boozer/booz_xform_jax/expected_output/boozmn_HSX_QHS_vacuum_ns201.nc`
 
 See `docs/mvp-pipeline.md` for full I/O details.
-
-> [!TODO]
-> Add standalone run scripts and workflows for `BOOZ_XFORM`.
 
 ---
 
@@ -173,19 +181,24 @@ See `docs/mvp-pipeline.md` for full I/O details.
 
 ## Container Specification (Phase 2)
 
+**`booz_xform` (legacy Fortran/Python):** Built from the single templated `mvp/Dockerfile` using build arguments:
+
+```
+docker build --build-arg ENVIRONMENT=stage-2-booz mvp/  # CPU
+```
+
+Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-2-booz-cpu`.
+
 **`booz_xform_jax`:** Built from the single templated `mvp/Dockerfile` using build arguments:
 
 ```
-docker build --build-arg ENVIRONMENT=stage-2-booz mvp/        # CPU
-docker build --build-arg ENVIRONMENT=stage-2-booz-gpu --build-arg CUDA_VERSION=12 mvp/  # GPU
+docker build --build-arg ENVIRONMENT=stage-2-booz-jax mvp/                                         # CPU
+docker build --build-arg ENVIRONMENT=stage-2-booz-jax-gpu --build-arg CUDA_VERSION=12 mvp/  # GPU
 ```
 
-Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-2-booz-cpu` and `stage-2-booz-gpu`. CI builds via `.github/workflows/containers.yml`.
+Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-2-booz-jax-cpu` and `stage-2-booz-jax-gpu`. CI builds via `.github/workflows/containers.yml`.
 
 See [guide](../guide.md#container-architecture) for full architecture details.
-
-> [!TODO]
-> Define container specifications for `BOOZ_XFORM`.
 
 ---
 
