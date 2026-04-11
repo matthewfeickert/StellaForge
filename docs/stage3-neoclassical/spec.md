@@ -307,7 +307,7 @@ docker build --build-arg ENVIRONMENT=stage-3-sfincs mvp/        # CPU
 docker build --build-arg ENVIRONMENT=stage-3-sfincs-gpu --build-arg CUDA_VERSION=12 mvp/  # GPU
 ```
 
-Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-3-sfincs-cpu` and `stage-3-sfincs-gpu`. CI builds via `.github/workflows/docker.yml`.
+Published to GHCR as `ghcr.io/rkhashmani/stellaforge:stage-3-sfincs-cpu` and `stage-3-sfincs-gpu`. CI builds via `.github/workflows/containers.yml`.
 
 See [guide](../guide.md#container-architecture) for full architecture details.
 

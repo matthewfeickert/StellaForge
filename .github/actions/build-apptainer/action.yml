@@ -1,0 +1,71 @@
+name: Build Apptainer Image
+description: Build and optionally push an Apptainer container image for a Pixi environment
+
+inputs:
+  environment:
+    description: Pixi environment name (e.g., stage-1-vmec, stage-1-vmec-gpu)
+    required: true
+  image-tag:
+    description: Image tag suffix (e.g., stage-1-vmec-cpu, stage-1-vmec-gpu)
+    required: true
+  cuda-version:
+    description: CUDA version for GPU builds (leave empty for CPU builds)
+    required: false
+    default: ""
+  registry:
+    description: Container registry
+    required: false
+    default: ghcr.io
+  push:
+    description: Whether to push the SIF to the registry
+    required: true
+  registry-username:
+    description: Registry login username
+    required: true
+  registry-password:
+    description: Registry login password (e.g., GITHUB_TOKEN)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Apptainer
+      uses: eWaterCycle/setup-apptainer@v2
+
+    # # can't use '${{ github.repository }}' as is case sensitive
+    - name: Lowercase repository name
+      id: repo
+      shell: bash
+      run: echo "name=${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
+    - name: Build Apptainer container image
+      shell: bash
+      working-directory: mvp
+      run: |
+        apptainer build \
+          --build-arg CUDA_VERSION="${{ inputs.cuda-version }}" \
+          --build-arg ENVIRONMENT="${{ inputs.environment }}" \
+          "${{ inputs.image-tag }}.sif" \
+          apptainer.def
+
+    - name: Login to container registry
+      if: inputs.push == 'true'
+      uses: docker/login-action@v4
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.registry-username }}
+        password: ${{ inputs.registry-password }}
+
+    - name: Push container image to container registry
+      if: inputs.push == 'true'
+      shell: bash
+      working-directory: mvp
+      run: |
+        short_sha="${GITHUB_SHA::7}"
+        registry="oras://${{ inputs.registry }}/${{ steps.repo.outputs.name }}"
+        apptainer push \
+          "${{ inputs.image-tag }}.sif" \
+          "${registry}:apptainer-${{ inputs.image-tag }}"
+        apptainer push \
+          "${{ inputs.image-tag }}.sif" \
+          "${registry}:apptainer-${{ inputs.image-tag }}-sha-${short_sha}"
