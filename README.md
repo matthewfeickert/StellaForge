@@ -85,24 +85,24 @@ Install the primary code, document the API and convergence behavior, write examp
 Containerize stages and write tests. Full checklist in the [Guide](docs/guide.md#phase-2-containerize--test).
 
 - [ ] Stage 1 -- Equilibrium
-  - [ ] `vmec_jax`
+  - [x] `vmec_jax`
   - [ ] `DESC`
   - [ ] `VMEC++`
 - [ ] Stage 2 -- Boozer Transform
-  - [ ] `booz_xform_jax`
-  - [ ] `BOOZ_XFORM`
+  - [x] `booz_xform_jax`
+  - [x] `BOOZ_XFORM`
 - [ ] Stage 3 -- Neoclassical
   - [ ] `NEO_JAX`
-  - [ ] `sfincs_jax`
+  - [x] `sfincs_jax`
   - [ ] `monkes`
   - [ ] `NEO`
   - [ ] `SFINCS`
 - [ ] Stage 4 -- Turbulence
-  - [ ] `SPECTRAX-GK`
+  - [x] `SPECTRAX-GK`
   - [ ] `GX`
   - [ ] `GENE`
 - [ ] Stage 5 -- Transport
-  - [ ] `NEOPAX`
+  - [x] `NEOPAX`
   - [ ] `Trinity3D`
 
 ### Phase 3: Integrate

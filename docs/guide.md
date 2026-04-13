@@ -164,7 +164,7 @@ StellaForge is a **recipe repo**: it contains everything needed to build and run
 **Pixi-based environments.** Dependencies are managed through `pixi.toml` files, e.g., `mvp/pixi.toml` and locked in `pixi.lock` files, e.g., `mvp/pixi.lock`. Stages with Pixi environments defined have named environments (e.g., `stage-1-vmec`, `stage-1-vmec-gpu`) that fully specify the dependency stack.
 
 **Templated container images.** There is one shared `Dockerfile` and `apptainer.def` Apptainer definition file, e.g. `mvp/Dockerfile` that uses build arguments to select the target environment at build time:
-- `ENVIRONMENT` -- the Pixi environment name (e.g., `stage-1-vmec`, `stage-2-booz-gpu`). Must be passed explicitly when building locally:
+- `ENVIRONMENT` -- the Pixi environment name (e.g., `stage-1-vmec`, `stage-2-booz-jax-gpu`). Must be passed explicitly when building locally:
    - `docker build --build-arg ENVIRONMENT=stage-1-vmec mvp/`
    - `cd mvp && apptainer build --build-arg ENVIRONMENT="stage-1-vmec" stage-1-vmec.sif apptainer.def`
 - `CUDA_VERSION` -- set for GPU builds (e.g., `12`), left empty for CPU builds
