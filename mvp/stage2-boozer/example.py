@@ -1,11 +1,8 @@
 from pathlib import Path
 
-# the pathlib path of this file
 file_path = Path(__file__).resolve()
-input_file_dir = (
-    file_path.parents[1] / "stage1-equilibrium" / "vmec_jax" / "expected_output"
-)
-output_file_dir = file_path.parent / "booz_xform_jax" / "expected_output"
+input_file_dir = file_path.parent.parent / "stage1-equilibrium" / "output"
+output_file_dir = file_path.parent / "output"
 output_file_dir.mkdir(exist_ok=True)
 
 import booz_xform_jax as bx
