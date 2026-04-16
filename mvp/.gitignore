@@ -1,3 +1,10 @@
 # pixi environments
 .pixi/*
 !.pixi/config.toml
+
+# Runtime outputs (distinct from tracked expected_output/ reference fixtures)
+stage*/output/
+
+# Stage 4 spectrax-gk writes the eikonal geometry cache next to its TOML
+# config (config-file-relative resolution)
+stage4-turbulence/input/*.eik.nc
