@@ -3,6 +3,9 @@
 ## Cross-Stage Infrastructure
 
 - [ ] Maybe a location where standard input/outputs are stored and logged? This has the added benefit that we can use this as a "cache" to quickly retrieve outputs that have already been processed, kind of like a database.
+## Documentation
+
+- [ ] Add more details for each software, e.g. for Spectrax-gk's `omega_t` what are units, what is it normalized to (gyro freq, etc), scale lengths. 
 
 ## Stage 1 -- Equilibrium
 
@@ -24,9 +27,10 @@
 
 - [ ] SPECTRAX-GK/GX, and GENE likely do not have directly compatible inputs; same adapter/translation issue as Stages 1 and 3
 
-## W&B
+## W&B / Output Tracking
 
 - [ ] Decide whether W&B dashboards are internal (maintainers only) or public-facing.
+- [ ] Eventually it'll be a public challenge SDK. For the official submission: we don't need to worry about API keys. 
 
 ## Workflow Engine
 
