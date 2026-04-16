@@ -15,7 +15,7 @@ jax = ">=0.9.1,<0.10"
 netcdf4 = ">=1.7.4,<2"
 
 [feature.vmec-jax.pypi-dependencies]
-vmec-jax = { git = "https://github.com/uwplasma/vmec_jax", rev = "cfdf674b0ca213b3b97244b0cf0273d481ec37fd" }
+vmec-jax = { git = "https://github.com/uwplasma/vmec_jax", rev = "fbe829c33f3bfcac5e2adc49b343cf43db280196" }
 
 [feature.vmec-jax.tasks.stage-1-vmec]
 cmd = "vmec_jax stage1-equilibrium/vmec_jax/input/input.HSX_QHS_vacuum_ns201"
