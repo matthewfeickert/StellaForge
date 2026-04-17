@@ -47,6 +47,7 @@ jobs:
             {"environment": "stage-2-booz", "image-tag": "stage-2-booz-cpu"},
             {"environment": "stage-2-booz-jax", "image-tag": "stage-2-booz-jax-cpu"},
             {"environment": "stage-2-booz-jax-gpu", "cuda-version": "12", "image-tag": "stage-2-booz-jax-gpu"},
+            {"environment": "stage-3-sfincs-fortran", "image-tag": "stage-3-sfincs-fortran-cpu"},
             {"environment": "stage-3-sfincs", "image-tag": "stage-3-sfincs-cpu"},
             {"environment": "stage-3-sfincs-gpu", "cuda-version": "12", "image-tag": "stage-3-sfincs-gpu"},
             {"environment": "stage-4-spectrax", "image-tag": "stage-4-spectrax-cpu"},
