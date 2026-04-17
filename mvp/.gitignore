@@ -8,7 +8,3 @@ stage*/output/
 # Runtime input copies seeded from expected_input/ (populate via
 # 'pixi run initialize-example-inputs' or manually)
 stage*/input/
-
-# Stage 4 spectrax-gk writes the eikonal geometry cache next to its TOML
-# config (config-file-relative resolution)
-stage4-turbulence/input/*.eik.nc
