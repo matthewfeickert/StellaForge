@@ -7,6 +7,11 @@ version = "0.1.0"
 [tasks.start]
 depends-on = [ "stage-1-vmec", "stage-2-booz", "stage-3-sfincs"]
 
+[tasks.initialize-example-inputs]
+cmd = """mkdir -p stage1-equilibrium/input && cp -Rn stage1-equilibrium/expected_input/. stage1-equilibrium/input/ && \
+mkdir -p stage3-neoclassical/input && cp -Rn stage3-neoclassical/expected_input/. stage3-neoclassical/input/ && \
+mkdir -p stage4-turbulence/input && cp -Rn stage4-turbulence/expected_input/. stage4-turbulence/input/"""
+
 [dependencies]
 
 [feature.vmec-jax.dependencies]
