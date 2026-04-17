@@ -184,17 +184,20 @@ Reference: `stellarator_workflow.tex`, Section 4.7.
 pixi run stage-4-spectrax
 ```
 
+> [!NOTE]
+> Populate `stage4-turbulence/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
+
 which executes something morally equivalent to:
 
 ```
-spectrax-gk run --config ./stage4-turbulence/spectrax_gk/input/runtime_hsx_nonlinear_vmec_geometry.toml --out stage4-turbulence/spectrax_gk/tools_out/hsx_run
+spectrax-gk run --config ./stage4-turbulence/input/runtime_hsx_nonlinear_vmec_geometry.toml --out stage4-turbulence/output/hsx_run
 ```
 
-**Input:** `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc` + `mvp/stage4-turbulence/spectrax_gk/input/runtime_hsx_nonlinear_vmec_geometry.toml`
-**Output:** `mvp/stage4-turbulence/spectrax_gk/expected_output/hsx_run.summary.json` + `mvp/stage4-turbulence/spectrax_gk/expected_output/hsx_run.diagnostics.csv`
+**Input:** `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc` + `mvp/stage4-turbulence/input/runtime_hsx_nonlinear_vmec_geometry.toml`
+**Output:** `mvp/stage4-turbulence/output/hsx_run.summary.json` + `mvp/stage4-turbulence/output/hsx_run.diagnostics.csv`
 
 > [!NOTE]
-> The TOML config has a `vmec_file` variable that must point to the Stage 1 output. The VMEC geometry path also requires `booz_xform_jax` at runtime (lazy dependency).
+> The TOML's `vmec_file` points into `stage1-equilibrium/output/`. Populate this directory by running `pixi run stage-1-vmec`, or by copying the reference wout from `stage1-equilibrium/expected_output/`. The VMEC geometry path also requires `booz_xform_jax` at runtime (lazy dependency).
 
 See `docs/mvp-pipeline.md` for full I/O details.
 

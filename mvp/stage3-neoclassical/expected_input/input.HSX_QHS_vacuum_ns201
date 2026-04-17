@@ -18,7 +18,7 @@
   rN_wish = 0.12247
 
   VMECRadialOption = 0
-  equilibriumFile = "<repo_root>/mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc"
+  equilibriumFile = "../../stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc"
   min_Bmn_to_load = 0
 
 /

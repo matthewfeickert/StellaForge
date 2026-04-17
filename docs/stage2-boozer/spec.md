@@ -163,8 +163,11 @@ Smoke-test task: verifies the `booz_xform` package is importable. A full end-to-
 pixi run -e stage-2-booz-jax stage-2-booz
 ```
 
-**Input:** `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc` (from Stage 1)
-**Output:** `mvp/stage2-boozer/booz_xform_jax/expected_output/boozmn_HSX_QHS_vacuum_ns201.nc`
+> [!NOTE]
+> Stage 2's driver reads wout from `stage1-equilibrium/output/`. Populate this directory by running `pixi run stage-1-vmec`, or by copying the reference wout from `stage1-equilibrium/expected_output/`.
+
+**Input:** `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc` (from Stage 1)
+**Output:** `mvp/stage2-boozer/output/boozmn_HSX_QHS_vacuum_ns201.nc`
 
 See `docs/mvp-pipeline.md` for full I/O details.
 

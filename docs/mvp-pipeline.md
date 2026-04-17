@@ -34,19 +34,18 @@
 
 ## MVP Test Data
 
-Input configs and expected output files live in `mvp/`:
+Input configs, committed reference outputs, and runtime outputs under `mvp/`:
 
 ```
 mvp/
-├── stage1-equilibrium/vmec_jax/          input/ + expected_output/
-├── stage2-boozer/booz_xform_jax/         input/ + expected_output/
-├── stage3-neoclassical/sfincs_jax/       input/ + expected_output/
-├── stage3-neoclassical/monkes/           input/ + expected_output/
-├── stage4-turbulence/spectrax_gk/        input/ + expected_output/
-└── stage5-transport/neopax/              input/ + expected_output/
+├── stage1-equilibrium/     expected_input/ + expected_output/ + (runtime)input/ + (runtime)output/
+├── stage2-boozer/          example.py + expected_output/ + (runtime)output/
+├── stage3-neoclassical/    expected_input/ + expected_output/ + run_monkes.py + (runtime)input/ + (runtime)output/
+├── stage4-turbulence/      expected_input/ + expected_output/ + (runtime)input/ + (runtime)output/
+└── stage5-transport/       run_NEOPAX.py + expected_output/ + (runtime)output/
 ```
 
-Each `input/` directory contains config files for that code. Each `expected_output/` directory holds the reference output produced by running the code. Stage owners populate both as they validate their stage.
+`expected_input/` and `expected_output/` hold the tracked reference configs and reference outputs. `input/` and `output/` are gitignored runtime locations -- the pipeline reads from `input/` and writes to `output/`. Use `pixi run initialize-example-inputs` to seed `input/` from `expected_input/` (optional; users may populate or modify `input/` directly). Cross-stage configs reference upstream `output/`, so run stages in forward-chain order (`stage-1-vmec` first).
 
 ---
 
@@ -58,9 +57,9 @@ Each `input/` directory contains config files for that code. Each `expected_outp
 
 | Direction                     | Format                                    | Location                                                                        |
 | ----------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------- |
-| **In**                        | Fortran-style Text                        | `mvp/stage1-equilibrium/vmec_jax/input/input.HSX_QHS_vacuum_ns201`              |
-| **Out**                       | NetCDF `wout_*.nc` (similar to hdf5 file) | `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc`  |
-| **Additional Out** (optional) | Text (terminal output)                    | `mvp/stage1-equilibrium/vmec_jax/expected_output/optional_terminal_output.vmec` |
+| **In**                        | Fortran-style Text                        | `mvp/stage1-equilibrium/input/input.HSX_QHS_vacuum_ns201`              |
+| **Out**                       | NetCDF `wout_*.nc` (similar to hdf5 file) | `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc`  |
+| **Additional Out** (optional) | Text (terminal output)                    | `mvp/stage1-equilibrium/output/optional_terminal_output.vmec` |
 
 > [!NOTE]
 > `HSX_QHS_vacuum_ns201` is an example name. This can be changed. As can the entirety of the name `optional_terminal_output.vmec`.
@@ -79,6 +78,9 @@ pixi install --environment stage-1-vmec
 pixi run stage-1-vmec
 ```
 
+> [!NOTE]
+> Populate `stage1-equilibrium/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
+
 ---
 
 ## Stage 2 -- Boozer Transform
@@ -87,11 +89,11 @@ pixi run stage-1-vmec
 
 | Direction | Format               | Location                                                                          |
 | --------- | -------------------- | --------------------------------------------------------------------------------- |
-| **In**    | NetCDF `wout_*.nc`   | `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc`    |
-| **Out**   | NetCDF `boozmn_*.nc` | `mvp/stage2-boozer/booz_xform_jax/expected_output/boozmn_HSX_QHS_vacuum_ns201.nc` |
+| **In**    | NetCDF `wout_*.nc`   | `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc`    |
+| **Out**   | NetCDF `boozmn_*.nc` | `mvp/stage2-boozer/output/boozmn_HSX_QHS_vacuum_ns201.nc` |
 
 > [!NOTE]
-> The input comes from Stage 1 output.
+> Stage 2's driver reads wout from `stage1-equilibrium/output/`. Populate this directory by running `pixi run stage-1-vmec`, or by copying the reference wout from `stage1-equilibrium/expected_output/`.
 
 ### How to Install
 
@@ -123,12 +125,9 @@ b.write_boozmn("boozmn_HSX_QHS_vacuum_ns201.nc")
 
 | Direction | Format                       | Location                                                                       |
 | --------- | ---------------------------- | ------------------------------------------------------------------------------ |
-| **In**    | NetCDF `wout_*.nc`           | `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc` |
-| **In**    | Fortran-style Text `input.*` | `mvp/stage3-neoclassical/sfincs_jax/input/input.HSX_QHS_vacuum_ns201`          |
-| **Out**   | HDF5 `sfincsOutput.h5`       | `mvp/stage3-neoclassical/sfincs_jax/expected_output/sfincsOutput.h5`           |
-
-> [!NOTE]
-> The input also comes from Stage 1 output. The 2nd input file has a variable `equilibriumFile` that must point to the (relative or absolute) location of the Stage 1's NetCDF output file. Additionally, the terminal output can be printed.
+| **In**    | NetCDF `wout_*.nc`           | `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc` |
+| **In**    | Fortran-style Text `input.*` | `mvp/stage3-neoclassical/input/input.HSX_QHS_vacuum_ns201`          |
+| **Out**   | HDF5 `sfincsOutput.h5`       | `mvp/stage3-neoclassical/output/sfincsOutput.h5`           |
 
 #### How to Install
 
@@ -138,20 +137,24 @@ pixi install --environment stage-3-sfincs
 
 #### How to Run
 
-**After** manually editing the value of `equilibriumFile` in `mvp/stage3-neoclassical/sfincs_jax/input/input.HSX_QHS_vacuum_ns201`, run
-
 ```
 pixi run stage-3-sfincs
 ```
+
+> [!NOTE]
+> The Stage 3 namelist reads wout from `stage1-equilibrium/output/`. Populate this directory by running `pixi run stage-1-vmec`, or by copying the reference wout from `stage1-equilibrium/expected_output/`.
+
+> [!NOTE]
+> Populate `stage3-neoclassical/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
 
 
 **code:** Monkes
 
 | Direction | Format               | Location                                                                                         |
 | --------- | -------------------- | ------------------------------------------------------------------------------------------------ |
-| **In**    | NetCDF `wout_*.nc`   | `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc`                   |
-| **In**    | NetCDF `boozmn_*.nc` | `mvp/stage2-boozer/booz_xform_jax/expected_output/boozmn_HSX_QHS_vacuum_ns201.nc`                |
-| **Out**   | HDF5 `D_ij.h5`       | `mvp/stage3-neoclassical/monkes/expected_output/Monoenergetic_database_VMEC_s_coordinate_HSX.h5` |
+| **In**    | NetCDF `wout_*.nc`   | `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc`                   |
+| **In**    | NetCDF `boozmn_*.nc` | `mvp/stage2-boozer/output/boozmn_HSX_QHS_vacuum_ns201.nc`                |
+| **Out**   | HDF5 `D_ij.h5`       | `mvp/stage3-neoclassical/output/Monoenergetic_database_VMEC_s_coordinate_HSX.h5` |
 
 > [!NOTE]
 > The inputs come from both Stage 1 and Stage 2.
@@ -165,7 +168,7 @@ pip install .
 
 #### How to Run
 
-Monkes is a little more involved. See `mvp/stage3-neoclassical/monkes/Test_Monoenergetic_database_VMEC_s_coordinate_HSX.py`
+Monkes is a little more involved. See `mvp/stage3-neoclassical/run_monkes.py`
 
 We basically call it inside a python loop to use Monkes to generate a database across different radial positions, electric fields, and collisionality, but it uses the same 2 input files for the entire loop.
 
@@ -177,13 +180,13 @@ We basically call it inside a python loop to use Monkes to generate a database a
 
 | Direction | Format             | Location                                                                           |
 | --------- | ------------------ | ---------------------------------------------------------------------------------- |
-| **In**    | NetCDF `wout_*.nc` | `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc`     |
-| **In**    | TOML config        | `mvp/stage4-turbulence/spectrax_gk/input/runtime_hsx_nonlinear_vmec_geometry.toml` |
-| **Out**   | Summary `JSON`     | `mvp/stage4-turbulence/spectrax_gk/expected_output/hsx_run.summary.json`           |
-| **Out**   | `csv`              | `mvp/stage4-turbulence/spectrax_gk/expected_output/hsx_run.diagnostics.csv`        |
+| **In**    | NetCDF `wout_*.nc` | `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc`     |
+| **In**    | TOML config        | `mvp/stage4-turbulence/input/runtime_hsx_nonlinear_vmec_geometry.toml` |
+| **Out**   | Summary `JSON`     | `mvp/stage4-turbulence/output/hsx_run.summary.json`           |
+| **Out**   | `csv`              | `mvp/stage4-turbulence/output/hsx_run.diagnostics.csv`        |
 
 > [!NOTE]
-> The input also comes from Stage 1 output. The 2nd input file has a variable `vmec_file` that must point to the (relative or absolute) location of the Stage 1's NetCDF output file.
+> The TOML's `vmec_file` points into `stage1-equilibrium/output/`. Populate this directory by running `pixi run stage-1-vmec`, or by copying the reference wout from `stage1-equilibrium/expected_output/`.
 
 ### How to Install
 
@@ -197,10 +200,13 @@ pixi install --environment stage-4-spectrax
 pixi run stage-4-spectrax
 ```
 
+> [!NOTE]
+> Populate `stage4-turbulence/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
+
 which executes something morally equivalent to
 
 ```
-spectrax-gk run --config runtime_hsx_nonlinear_vmec_geometry.toml --out tools_out/hsx_run
+spectrax-gk run --config runtime_hsx_nonlinear_vmec_geometry.toml --out output/hsx_run
 ```
 
 ---
@@ -211,10 +217,10 @@ spectrax-gk run --config runtime_hsx_nonlinear_vmec_geometry.toml --out tools_ou
 
 | Direction                                 | Format               | Location                                                                                         |
 | ----------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------ |
-| **In**                                    | NetCDF `wout_*.nc`   | `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc`                   |
-| **In**                                    | NetCDF `boozmn_*.nc` | `mvp/stage2-boozer/booz_xform_jax/expected_output/boozmn_HSX_QHS_vacuum_ns201.nc`                |
-| **In** (Only needed if `monkes` is used.) | HDF5 `D_ij.h5`       | `mvp/stage3-neoclassical/monkes/expected_output/Monoenergetic_database_VMEC_s_coordinate_HSX.h5` |
-| **Out**                                   | HDF5 `profiles_*.h5` | `mvp/stage5-transport/neopax/expected_output/NEOPAX_output.h5`                                   |
+| **In**                                    | NetCDF `wout_*.nc`   | `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc`                   |
+| **In**                                    | NetCDF `boozmn_*.nc` | `mvp/stage2-boozer/output/boozmn_HSX_QHS_vacuum_ns201.nc`                |
+| **In** (Only needed if `monkes` is used.) | HDF5 `D_ij.h5`       | `mvp/stage3-neoclassical/output/Monoenergetic_database_VMEC_s_coordinate_HSX.h5` |
+| **Out**                                   | HDF5 `profiles_*.h5` | `mvp/stage5-transport/output/NEOPAX_output.h5`                                   |
 > [!NOTE]
 > The inputs come from Stage 1, Stage 2, and Stage 3.
 
@@ -226,7 +232,7 @@ pixi install --environment stage-5-neopax
 
 ### How to Run
 
-This is run inside a script. See `mvp/stage5-transport/neopax/run_NEOPAX.py` as a reference.
+This is run inside a script. See `mvp/stage5-transport/run_NEOPAX.py` as a reference.
 
 > [!NOTE]
 > `NEOPAX`, being the final stage, has additional complexities and variabilities in the workflow.

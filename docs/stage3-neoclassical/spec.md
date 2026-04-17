@@ -268,21 +268,25 @@ pip install .
 
 **`sfincs_jax` (via Pixi):** From inside `mvp/`:
 
-After editing `equilibriumFile` in `mvp/stage3-neoclassical/sfincs_jax/input/input.HSX_QHS_vacuum_ns201` to point to the Stage 1 output:
-
 ```
 pixi run stage-3-sfincs
 ```
 
-**Input:** `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc` + `mvp/stage3-neoclassical/sfincs_jax/input/input.HSX_QHS_vacuum_ns201`
-**Output:** `mvp/stage3-neoclassical/sfincs_jax/expected_output/sfincsOutput.h5`
+> [!NOTE]
+> The Stage 3 namelist reads wout from `stage1-equilibrium/output/`. Populate this directory by running `pixi run stage-1-vmec`, or by copying the reference wout from `stage1-equilibrium/expected_output/`.
+
+> [!NOTE]
+> Populate `stage3-neoclassical/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
+
+**Input:** `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc` + `mvp/stage3-neoclassical/input/input.HSX_QHS_vacuum_ns201`
+**Output:** `mvp/stage3-neoclassical/output/sfincsOutput.h5`
 
 See `docs/mvp-pipeline.md` for full I/O details.
 
-**`monkes`:** More involved than a single command. See `mvp/stage3-neoclassical/monkes/Test_Monoenergetic_database_VMEC_s_coordinate_HSX.py` for a reference script that generates a D_ij database across radial positions, electric fields, and collisionality.
+**`monkes`:** More involved than a single command. See `mvp/stage3-neoclassical/run_monkes.py` for a reference script that generates a D_ij database across radial positions, electric fields, and collisionality.
 
-**Input:** `mvp/stage1-equilibrium/vmec_jax/expected_output/wout_HSX_QHS_vacuum_ns201.nc` + `mvp/stage2-boozer/booz_xform_jax/expected_output/boozmn_HSX_QHS_vacuum_ns201.nc`
-**Output:** `mvp/stage3-neoclassical/monkes/expected_output/Monoenergetic_database_VMEC_s_coordinate_HSX.h5`
+**Input:** `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc` + `mvp/stage2-boozer/output/boozmn_HSX_QHS_vacuum_ns201.nc`
+**Output:** `mvp/stage3-neoclassical/output/Monoenergetic_database_VMEC_s_coordinate_HSX.h5`
 
 > [!TODO]
 > Add standalone run scripts and workflows for `NEO_JAX`, `NEO`, and `SFINCS`.

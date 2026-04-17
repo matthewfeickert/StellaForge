@@ -7,6 +7,11 @@ version = "0.1.0"
 [tasks.start]
 depends-on = [ "stage-1-vmec", "stage-2-booz", "stage-3-sfincs"]
 
+[tasks.initialize-example-inputs]
+cmd = """mkdir -p stage1-equilibrium/input && cp -Rn stage1-equilibrium/expected_input/. stage1-equilibrium/input/ && \
+mkdir -p stage3-neoclassical/input && cp -Rn stage3-neoclassical/expected_input/. stage3-neoclassical/input/ && \
+mkdir -p stage4-turbulence/input && cp -Rn stage4-turbulence/expected_input/. stage4-turbulence/input/"""
+
 [dependencies]
 
 [feature.vmec-jax.dependencies]
@@ -18,7 +23,7 @@ netcdf4 = ">=1.7.4,<2"
 vmec-jax = { git = "https://github.com/uwplasma/vmec_jax", rev = "fbe829c33f3bfcac5e2adc49b343cf43db280196" }
 
 [feature.vmec-jax.tasks.stage-1-vmec]
-cmd = "vmec_jax stage1-equilibrium/vmec_jax/input/input.HSX_QHS_vacuum_ns201"
+cmd = "vmec_jax stage1-equilibrium/input/input.HSX_QHS_vacuum_ns201 --outdir stage1-equilibrium/output"
 
 [feature.booz-xform.dependencies]
 booz_xform = ">=0.0.9,<0.0.10"
@@ -50,7 +55,7 @@ h5py = ">=3.16.0,<4"
 sfincs-jax = { git = "https://github.com/uwplasma/sfincs_jax", rev = "de50abd2ee9063176728805288e8bafe8e83cbc3" }
 
 [feature.sfincs-jax.tasks.stage-3-sfincs]
-cmd = "sfincs_jax stage3-neoclassical/sfincs_jax/input/input.HSX_QHS_vacuum_ns201"
+cmd = "sfincs_jax stage3-neoclassical/input/input.HSX_QHS_vacuum_ns201 --out stage3-neoclassical/output/sfincsOutput.h5"
 
 [feature.spectrax-gk.dependencies]
 numpy = ">=2.4.3,<3"
@@ -68,7 +73,7 @@ spectrax-gk = { git = "https://github.com/uwplasma/SPECTRAX-GK.git", rev = "cbd1
 booz-xform-jax = { git = "https://github.com/uwplasma/booz_xform_jax.git", rev = "1f206597f2f28436e0e2124160c13de9ae63b2ea" }
 
 [feature.spectrax-gk.tasks.stage-4-spectrax]
-cmd = "spectrax-gk run --config ./stage4-turbulence/spectrax_gk/input/runtime_hsx_nonlinear_vmec_geometry.toml --out stage4-turbulence/spectrax_gk/tools_out/hsx_run"
+cmd = "spectrax-gk run --config ./stage4-turbulence/input/runtime_hsx_nonlinear_vmec_geometry.toml --out stage4-turbulence/output/hsx_run"
 
 [feature.neopax.dependencies]
 scipy = ">=1.17.1,<2"
