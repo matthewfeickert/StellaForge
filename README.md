@@ -96,7 +96,7 @@ Containerize stages and write tests. Full checklist in the [Guide](docs/guide.md
   - [x] `sfincs_jax`
   - [ ] `monkes`
   - [ ] `NEO`
-  - [ ] `SFINCS`
+  - [x] `SFINCS`
 - [ ] Stage 4 -- Turbulence
   - [x] `SPECTRAX-GK`
   - [ ] `GX`

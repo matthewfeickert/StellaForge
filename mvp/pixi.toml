@@ -45,6 +45,9 @@ booz-xform-jax = { git = "https://github.com/uwplasma/booz_xform_jax.git", rev =
 [feature.booz-xform-jax.tasks.stage-2-booz]
 cmd = "python stage2-boozer/example.py"
 
+[feature.sfincs.dependencies]
+sfincs-mpich = ">=3.0.0,<4"
+
 [feature.sfincs-jax.dependencies]
 numpy = ">=2.4.3,<3"
 scipy = ">=1.17.1,<2"
@@ -103,6 +106,7 @@ stage-1-vmec-gpu = {features = ["vmec-jax", "cuda"], no-default-feature = true }
 stage-2-booz = {features = ["booz-xform"], no-default-feature = true }
 stage-2-booz-jax = {features = ["booz-xform-jax"], no-default-feature = true }
 stage-2-booz-jax-gpu = {features = ["booz-xform-jax", "cuda"], no-default-feature = true }
+stage-3-sfincs-fortran = {features = ["sfincs"], no-default-feature = true}
 stage-3-sfincs = {features = ["sfincs-jax"], no-default-feature = true}
 stage-3-sfincs-gpu = {features = ["sfincs-jax", "cuda"], no-default-feature = true }
 stage-4-spectrax = {features = ["spectrax-gk"], no-default-feature = true}
