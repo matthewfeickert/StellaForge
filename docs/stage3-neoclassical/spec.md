@@ -275,6 +275,9 @@ pixi run stage-3-sfincs
 > [!NOTE]
 > The Stage 3 namelist reads wout from `stage1-equilibrium/output/`. Populate this directory by running `pixi run stage-1-vmec`, or by copying the reference wout from `stage1-equilibrium/expected_output/`.
 
+> [!NOTE]
+> Populate `stage3-neoclassical/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
+
 **Input:** `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc` + `mvp/stage3-neoclassical/input/input.HSX_QHS_vacuum_ns201`
 **Output:** `mvp/stage3-neoclassical/output/sfincsOutput.h5`
 

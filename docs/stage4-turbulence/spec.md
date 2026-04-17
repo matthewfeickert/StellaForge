@@ -184,6 +184,9 @@ Reference: `stellarator_workflow.tex`, Section 4.7.
 pixi run stage-4-spectrax
 ```
 
+> [!NOTE]
+> Populate `stage4-turbulence/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
+
 which executes something morally equivalent to:
 
 ```

@@ -78,6 +78,9 @@ pixi install --environment stage-1-vmec
 pixi run stage-1-vmec
 ```
 
+> [!NOTE]
+> Populate `stage1-equilibrium/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
+
 ---
 
 ## Stage 2 -- Boozer Transform
@@ -141,6 +144,9 @@ pixi run stage-3-sfincs
 > [!NOTE]
 > The Stage 3 namelist reads wout from `stage1-equilibrium/output/`. Populate this directory by running `pixi run stage-1-vmec`, or by copying the reference wout from `stage1-equilibrium/expected_output/`.
 
+> [!NOTE]
+> Populate `stage3-neoclassical/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
+
 
 **code:** Monkes
 
@@ -193,6 +199,9 @@ pixi install --environment stage-4-spectrax
 ```
 pixi run stage-4-spectrax
 ```
+
+> [!NOTE]
+> Populate `stage4-turbulence/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
 
 which executes something morally equivalent to
 
