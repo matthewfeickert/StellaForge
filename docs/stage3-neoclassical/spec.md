@@ -229,6 +229,12 @@ $$D_{ij} = \begin{pmatrix} D_{11} & D_{12} & D_{13} \\ D_{21} & D_{22} & D_{23} 
 
 ## Installation & Platform
 
+**`sfincs`:** Install via the Pixi environment. From inside `mvp/`:
+
+```
+pixi install --environment stage-3-sfincs-fortran
+```
+
 **`sfincs_jax`:** Install via the Pixi environment. From inside `mvp/`:
 
 ```
