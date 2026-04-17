@@ -38,14 +38,14 @@ Input configs, committed reference outputs, and runtime outputs under `mvp/`:
 
 ```
 mvp/
-├── stage1-equilibrium/     input/ + expected_output/ + (runtime)output/
+├── stage1-equilibrium/     expected_input/ + expected_output/ + (runtime)input/ + (runtime)output/
 ├── stage2-boozer/          example.py + expected_output/ + (runtime)output/
-├── stage3-neoclassical/    input/ + expected_output/ + (runtime)output/ + run_monkes.py
-├── stage4-turbulence/      input/ + expected_output/ + (runtime)output/
+├── stage3-neoclassical/    expected_input/ + expected_output/ + run_monkes.py + (runtime)input/ + (runtime)output/
+├── stage4-turbulence/      expected_input/ + expected_output/ + (runtime)input/ + (runtime)output/
 └── stage5-transport/       run_NEOPAX.py + expected_output/ + (runtime)output/
 ```
 
-Each `input/` directory holds static config files. Each `expected_output/` directory holds the committed reference outputs for comparison purposes. `output/` is the runtime write location for live-pipeline runs and is gitignored; cross-stage configs reference upstream `output/`, so run stages in forward-chain order (`stage-1-vmec` first).
+`expected_input/` and `expected_output/` hold the tracked reference configs and reference outputs. `input/` and `output/` are gitignored runtime locations -- the pipeline reads from `input/` and writes to `output/`. Use `pixi run initialize-example-inputs` to seed `input/` from `expected_input/` (optional; users may populate or modify `input/` directly). Cross-stage configs reference upstream `output/`, so run stages in forward-chain order (`stage-1-vmec` first).
 
 ---
 

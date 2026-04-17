@@ -28,7 +28,7 @@ StellaForge/
 │   ├── pixi.toml                # Per-stage environment definitions and dependency pins
 │   ├── pixi.lock                # Digest-level lock file for reproducible builds
 │   ├── Dockerfile               # Single templated Dockerfile (all stages via build args)
-│   └── stage{N}-{name}/        # Per-stage input/, expected_output/ (reference), output/ (runtime, gitignored)
+│   └── stage{N}-{name}/        # expected_input/, expected_output/ (reference), input/, output/ (runtime, gitignored)
 ├── .github/                     # CI workflows for container builds
 ├── stellarator_workflow/        # Read-only TeX reference (git submodule)
 └── LICENSE
