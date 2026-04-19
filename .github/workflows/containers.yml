@@ -44,6 +44,8 @@ jobs:
           [
             {"environment": "stage-1-vmec", "image-tag": "stage-1-vmec-cpu"},
             {"environment": "stage-1-vmec-gpu", "cuda-version": "12", "image-tag": "stage-1-vmec-gpu"},
+            {"environment": "stage-1-desc", "image-tag": "stage-1-desc-cpu"},
+            {"environment": "stage-1-desc-gpu", "cuda-version": "12", "image-tag": "stage-1-desc-gpu"},
             {"environment": "stage-2-booz", "image-tag": "stage-2-booz-cpu"},
             {"environment": "stage-2-booz-jax", "image-tag": "stage-2-booz-jax-cpu"},
             {"environment": "stage-2-booz-jax-gpu", "cuda-version": "12", "image-tag": "stage-2-booz-jax-gpu"},
