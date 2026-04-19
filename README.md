@@ -86,9 +86,9 @@ Containerize stages and write tests. Full checklist in the [Guide](docs/guide.md
 
 - [ ] Stage 1 -- Equilibrium
   - [x] `vmec_jax`
-  - [ ] `DESC`
+  - [x] `DESC`
   - [ ] `VMEC++`
-- [ ] Stage 2 -- Boozer Transform
+- [x] Stage 2 -- Boozer Transform
   - [x] `booz_xform_jax`
   - [x] `BOOZ_XFORM`
 - [ ] Stage 3 -- Neoclassical

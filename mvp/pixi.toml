@@ -25,6 +25,9 @@ vmec-jax = { git = "https://github.com/uwplasma/vmec_jax", rev = "fbe829c33f3bfc
 [feature.vmec-jax.tasks.stage-1-vmec]
 cmd = "vmec_jax stage1-equilibrium/input/input.HSX_QHS_vacuum_ns201 --outdir stage1-equilibrium/output"
 
+[feature.desc.dependencies]
+desc-opt = ">=0.17.1,<0.18"
+
 [feature.booz-xform.dependencies]
 booz_xform = ">=0.0.9,<0.0.10"
 
@@ -103,6 +106,8 @@ cuda = "12"
 [environments]
 stage-1-vmec = {features = ["vmec-jax"], no-default-feature = true }
 stage-1-vmec-gpu = {features = ["vmec-jax", "cuda"], no-default-feature = true }
+stage-1-desc = {features = ["desc"], no-default-feature = true }
+stage-1-desc-gpu = {features = ["desc", "cuda"], no-default-feature = true }
 stage-2-booz = {features = ["booz-xform"], no-default-feature = true }
 stage-2-booz-jax = {features = ["booz-xform-jax"], no-default-feature = true }
 stage-2-booz-jax-gpu = {features = ["booz-xform-jax", "cuda"], no-default-feature = true }
