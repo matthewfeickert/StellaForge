@@ -148,6 +148,33 @@ pixi run stage-3-sfincs
 > Populate `stage3-neoclassical/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
 
 
+**Code:** SFINCS (Fortran)
+
+| Direction | Format                       | Location                                                                       |
+| --------- | ---------------------------- | ------------------------------------------------------------------------------ |
+| **In**    | NetCDF `wout_*.nc`           | `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc` |
+| **In**    | Fortran-style Text `input.*` | `mvp/stage3-neoclassical/input/input.HSX_QHS_vacuum_ns201`          |
+| **Out**   | HDF5 `sfincsOutput.h5`       | `mvp/stage3-neoclassical/output/sfincsOutput.h5`           |
+
+#### How to Install
+
+```
+pixi install --environment stage-3-sfincs-fortran
+```
+
+#### How to Run
+
+```
+pixi run stage-3-sfincs-fortran
+```
+
+> [!NOTE]
+> `SFINCS` (Fortran) is an alternative to `sfincs_jax`. It reads the same namelist and writes to the same `sfincsOutput.h5` path, so running both against one output directory will overwrite the prior result.
+
+> [!NOTE]
+> The task copies `stage3-neoclassical/input/input.HSX_QHS_vacuum_ns201` to `stage3-neoclassical/output/input.namelist` before invoking the binary, because SFINCS (Fortran) reads `input.namelist` from its working directory.
+
+
 **code:** Monkes
 
 | Direction | Format               | Location                                                                                         |
