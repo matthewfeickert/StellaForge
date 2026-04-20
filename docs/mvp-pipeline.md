@@ -45,7 +45,7 @@ mvp/
 └── stage5-transport/       run_NEOPAX.py + expected_output/ + (runtime)output/
 ```
 
-`expected_input/` and `expected_output/` hold the tracked reference configs and reference outputs. `input/` and `output/` are gitignored runtime locations -- the pipeline reads from `input/` and writes to `output/`. Use `pixi run initialize-example-inputs` to seed `input/` from `expected_input/` (optional; users may populate or modify `input/` directly). Cross-stage configs reference upstream `output/`, so run stages in forward-chain order (`stage-1-vmec` first).
+`expected_input/` and `expected_output/` hold the tracked reference configs and reference outputs. `input/` and `output/` are gitignored runtime locations -- the pipeline reads from `input/` and writes to `output/`. Use `pixi run initialize-example-inputs` to seed `input/` from `expected_input/` (optional; users may populate or modify `input/` directly). The task skips any stage whose `input/` dir is already populated. To re-seed a stage (e.g. after `expected_input/` changes upstream), wipe that stage's `input/` dir and re-run the task. Cross-stage configs reference upstream `output/`, so run stages in forward-chain order (`stage-1-vmec` first).
 
 ---
 
