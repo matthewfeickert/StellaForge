@@ -51,6 +51,12 @@ cmd = "python stage2-boozer/example.py"
 [feature.sfincs.dependencies]
 sfincs-mpich = ">=3.0.0,<4"
 
+[feature.sfincs.tasks.stage-3-sfincs-fortran]
+cmd = """mkdir -p stage3-neoclassical/output && \
+cp stage3-neoclassical/input/input.HSX_QHS_vacuum_ns201 stage3-neoclassical/output/input.namelist && \
+cd stage3-neoclassical/output && \
+sfincs"""
+
 [feature.sfincs-jax.dependencies]
 numpy = ">=2.4.3,<3"
 scipy = ">=1.17.1,<2"
