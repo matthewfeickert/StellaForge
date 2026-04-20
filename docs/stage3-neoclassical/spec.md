@@ -229,6 +229,12 @@ $$D_{ij} = \begin{pmatrix} D_{11} & D_{12} & D_{13} \\ D_{21} & D_{22} & D_{23} 
 
 ## Installation & Platform
 
+**`sfincs`:** Install via the Pixi environment. From inside `mvp/`:
+
+```
+pixi install --environment stage-3-sfincs-fortran
+```
+
 **`sfincs_jax`:** Install via the Pixi environment. From inside `mvp/`:
 
 ```
@@ -246,7 +252,7 @@ pip install .
 ```
 
 > [!TODO]
-> Document installation instructions and platform notes for `NEO_JAX`, `NEO`, and `SFINCS`.
+> Document installation instructions and platform notes for `NEO_JAX` and `NEO`.
 
 ---
 
@@ -280,6 +286,19 @@ pixi run stage-3-sfincs
 
 **Input:** `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc` + `mvp/stage3-neoclassical/input/input.HSX_QHS_vacuum_ns201`
 **Output:** `mvp/stage3-neoclassical/output/sfincsOutput.h5`
+
+See `docs/mvp-pipeline.md` for full I/O details.
+
+**`SFINCS` (Fortran, via Pixi):** From inside `mvp/`:
+
+```
+pixi run stage-3-sfincs-fortran
+```
+
+Alternative implementation to `sfincs_jax`. Consumes the same input namelist and writes to the same `sfincsOutput.h5` path; the task stages the namelist as `input.namelist` in the output directory before invocation because the Fortran binary reads that filename from its working directory.
+
+**Input:** same as `sfincs_jax` above.
+**Output:** `mvp/stage3-neoclassical/output/sfincsOutput.h5` (overwrites `sfincs_jax`'s output if both are run against the same directory).
 
 See `docs/mvp-pipeline.md` for full I/O details.
 

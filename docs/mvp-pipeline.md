@@ -45,7 +45,7 @@ mvp/
 └── stage5-transport/       run_NEOPAX.py + expected_output/ + (runtime)output/
 ```
 
-`expected_input/` and `expected_output/` hold the tracked reference configs and reference outputs. `input/` and `output/` are gitignored runtime locations -- the pipeline reads from `input/` and writes to `output/`. Use `pixi run initialize-example-inputs` to seed `input/` from `expected_input/` (optional; users may populate or modify `input/` directly). Cross-stage configs reference upstream `output/`, so run stages in forward-chain order (`stage-1-vmec` first).
+`expected_input/` and `expected_output/` hold the tracked reference configs and reference outputs. `input/` and `output/` are gitignored runtime locations -- the pipeline reads from `input/` and writes to `output/`. Use `pixi run initialize-example-inputs` to seed `input/` from `expected_input/` (optional; users may populate or modify `input/` directly). The task skips any stage whose `input/` dir is already populated. To re-seed a stage (e.g. after `expected_input/` changes upstream), wipe that stage's `input/` dir and re-run the task. Cross-stage configs reference upstream `output/`, so run stages in forward-chain order (`stage-1-vmec` first).
 
 ---
 
@@ -146,6 +146,33 @@ pixi run stage-3-sfincs
 
 > [!NOTE]
 > Populate `stage3-neoclassical/input/` from the tracked `expected_input/` via `pixi run initialize-example-inputs` (optional) or manually before running.
+
+
+**Code:** SFINCS (Fortran)
+
+| Direction | Format                       | Location                                                                       |
+| --------- | ---------------------------- | ------------------------------------------------------------------------------ |
+| **In**    | NetCDF `wout_*.nc`           | `mvp/stage1-equilibrium/output/wout_HSX_QHS_vacuum_ns201.nc` |
+| **In**    | Fortran-style Text `input.*` | `mvp/stage3-neoclassical/input/input.HSX_QHS_vacuum_ns201`          |
+| **Out**   | HDF5 `sfincsOutput.h5`       | `mvp/stage3-neoclassical/output/sfincsOutput.h5`           |
+
+#### How to Install
+
+```
+pixi install --environment stage-3-sfincs-fortran
+```
+
+#### How to Run
+
+```
+pixi run stage-3-sfincs-fortran
+```
+
+> [!NOTE]
+> `SFINCS` (Fortran) is an alternative to `sfincs_jax`. It reads the same namelist and writes to the same `sfincsOutput.h5` path, so running both against one output directory will overwrite the prior result.
+
+> [!NOTE]
+> The task copies `stage3-neoclassical/input/input.HSX_QHS_vacuum_ns201` to `stage3-neoclassical/output/input.namelist` before invoking the binary, because SFINCS (Fortran) reads `input.namelist` from its working directory.
 
 
 **code:** Monkes

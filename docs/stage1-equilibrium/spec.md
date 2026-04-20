@@ -38,6 +38,12 @@ Reference: `stellarator_workflow/stellarator_workflow.tex`, Section 4.1 (`VMEC++
 pixi install --environment stage-1-vmec
 ```
 
+**`desc-opt`:** Install via the Pixi environment. From inside `mvp/`:
+
+```
+pixi install --environment stage-1-desc
+```
+
 See `docs/mvp-pipeline.md` for run commands and I/O details.
 
 > [!TODO]
